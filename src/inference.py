@@ -6,6 +6,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Порог бинаризации для сегментационной маски (гиперпараметр)
+# Значения выше порога считаются объектом, ниже — фоном
+SEGMENTATION_THRESHOLD = 0.5
+
 
 class SegmentationModel:
     def __init__(self, model_path=None, device="cpu"):
@@ -59,7 +63,7 @@ class SegmentationModel:
             elif len(prediction.shape) == 3:
                 prediction = prediction[0]
 
-            binary_mask = (prediction > 0.5).astype(np.uint8) * 255
+            binary_mask = (prediction > SEGMENTATION_THRESHOLD).astype(np.uint8) * 255
 
             return binary_mask
 
